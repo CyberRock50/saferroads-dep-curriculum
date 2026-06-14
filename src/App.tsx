@@ -20,8 +20,7 @@ import Overview from './components/Overview';
 import Slideshow from './components/Slideshow';
 import QuizView from './components/QuizView';
 
-// Update this URL to your live Safer Roads Driving School site once deployed
-const MAIN_SITE_URL = 'https://rocklinconsult.netlify.app';
+const MAIN_SITE_URL = 'https://saferroadsacademy.netlify.app';
 
 export default function App() {
   const [activeDay, setActiveDay] = useState<number>(1);
@@ -33,14 +32,18 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-900 font-sans">
       {/* Safer Roads Branding Bar - spans full width, navy/gold */}
+      {/* Currently a no-op (href="#") until MAIN_SITE_URL is set above */}
       <a
-        href={MAIN_SITE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed top-0 left-0 right-0 z-30 flex items-center justify-center gap-2
+        href={MAIN_SITE_URL || '#'}
+        onClick={(e) => { if (!MAIN_SITE_URL) e.preventDefault(); }}
+        target={MAIN_SITE_URL ? '_blank' : undefined}
+        rel={MAIN_SITE_URL ? 'noopener noreferrer' : undefined}
+        title={MAIN_SITE_URL ? undefined : 'Safer Roads Driving School site coming soon'}
+        className={`fixed top-0 left-0 right-0 z-30 flex items-center justify-center gap-2
                    bg-[#0B1F3A] text-[#F5BE3A] text-xs md:text-sm font-semibold
-                   py-1.5 hover:bg-[#0B1F3A]/90 transition-colors
-                   border-b border-[#C9920A]/40"
+                   py-1.5 transition-colors
+                   border-b border-[#C9920A]/40
+                   ${MAIN_SITE_URL ? 'hover:bg-[#0B1F3A]/90 cursor-pointer' : 'cursor-default opacity-80'}`}
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         Back to Safer Roads Driving School
