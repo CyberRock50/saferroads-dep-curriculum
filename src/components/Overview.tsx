@@ -86,9 +86,16 @@ export default function Overview({ activeModule }: { activeModule: DrivingModule
         </h3>
         <div className="flex flex-wrap gap-3">
           {activeModule.resources.map((res, i) => (
-            <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium">
+            <a 
+              key={i} 
+              href={`https://www.google.com/search?q=${encodeURIComponent(res + ' Maryland MVA')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 text-blue-600 hover:text-blue-800 hover:bg-slate-50 text-sm font-medium transition-colors shadow-sm cursor-pointer"
+            >
+              <FileText className="w-4 h-4" />
               {res}
-            </div>
+            </a>
           ))}
         </div>
       </section>

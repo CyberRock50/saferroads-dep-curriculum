@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Quiz } from "../types";
-import { CheckCircle2, XCircle, RefreshCw } from "lucide-react";
+import { CheckCircle2, XCircle, RefreshCw, Key } from "lucide-react";
 
 export default function QuizView({ quiz }: { quiz: Quiz }) {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
+  const [showAnswerKey, setShowAnswerKey] = useState(false);
 
   const questions = quiz.questions;
 
@@ -19,7 +20,7 @@ export default function QuizView({ quiz }: { quiz: Quiz }) {
   }
 
   const handleSelect = (questionId: number, optionIndex: number) => {
-    if (showResults) return;
+    if (showResults || showAnswerKey) return;
     setAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
   };
 
@@ -36,6 +37,16 @@ export default function QuizView({ quiz }: { quiz: Quiz }) {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 pb-10">
+      <div className="flex justify-end">
+        <button 
+          onClick={() => setShowAnswerKey(!showAnswerKey)} 
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors border ${showAnswerKey ? 'bg-amber-100 border-amber-300 text-amber-800' : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200'}`}
+        >
+          <Key className="w-4 h-4" />
+          {showAnswerKey ? 'Hide Answer Key' : 'Instructor Answer Key'}
+        </button>
+      </div>
+
       {/* Quiz Header */}
       {!showResults ? (
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
@@ -96,7 +107,13 @@ export default function QuizView({ quiz }: { quiz: Quiz }) {
                   let optStyle = "border-slate-200 hover:border-indigo-300 hover:bg-indigo-50";
                   let showIcon = null;
 
-                  if (showResults) {
+                  if (showAnswerKey) {
+                    optStyle = "border-slate-200 opacity-60";
+                    if (optIdx === q.correctIndex) {
+                       optStyle = "bg-amber-50 border-amber-300 font-semibold text-amber-900";
+                       showIcon = <CheckCircle2 className="w-5 h-5 text-amber-600" />;
+                    }
+                  } else if (showResults) {
                     optStyle = "border-slate-200 opacity-60"; // default if not selected and not correct
                     if (optIdx === q.correctIndex) {
                       optStyle = "bg-emerald-50 border-emerald-300 font-semibold text-emerald-900";
@@ -115,7 +132,7 @@ export default function QuizView({ quiz }: { quiz: Quiz }) {
                     <button
                       key={optIdx}
                       onClick={() => handleSelect(q.id, optIdx)}
-                      disabled={showResults}
+                      disabled={showResults || showAnswerKey}
                       className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center justify-between ${optStyle}`}
                     >
                       <span>{opt}</span>
